@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi pedido - Pizzería Mufasa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../Css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand navbar-dark barra px-3">
+    <span class="navbar-brand fw-bold">🦁 Pizzería Mufasa</span>
+    <div class="navbar-nav">
+      <a class="nav-link" href="../index.html">Inicio</a>
+      <a class="nav-link" href="productos.html">Productos</a>
+      <a class="nav-link" href="pedidos.html">Mi pedido</a>
+    </div>
+  </nav>
+
+  <main class="container py-5" style="max-width: 800px;">
+    <h2 class="titulo fw-bold mb-4">Mi pedido</h2>
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle bg-white">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Queso extra (+$25)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-warning"><th colspan="4">Pizzas</th></tr>
+          <tr class="producto" data-nombre="La Simba" data-precio="149">
+            <td>La Simba (pepperoni)</td><td>$149</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center"><input type="checkbox" class="form-check-input queso"></td>
+          </tr>
+          <tr class="producto" data-nombre="Rey León" data-precio="169">
+            <td>Rey León (cuatro quesos)</td><td>$169</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center"><input type="checkbox" class="form-check-input queso"></td>
+          </tr>
+          <tr class="producto" data-nombre="Nala" data-precio="149">
+            <td>Nala (jamón y piña)</td><td>$149</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center"><input type="checkbox" class="form-check-input queso"></td>
+          </tr>
+          <tr class="producto" data-nombre="Sabana" data-precio="139">
+            <td>Sabana (verduras)</td><td>$139</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center"><input type="checkbox" class="form-check-input queso"></td>
+          </tr>
+
+          <tr class="table-warning"><th colspan="4">Bebidas</th></tr>
+          <tr class="producto" data-nombre="Refresco 600 ml" data-precio="30">
+            <td>Refresco 600 ml</td><td>$30</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center">—</td>
+          </tr>
+          <tr class="producto" data-nombre="Agua de jamaica" data-precio="35">
+            <td>Agua de jamaica</td><td>$35</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center">—</td>
+          </tr>
+          <tr class="producto" data-nombre="Limonada" data-precio="35">
+            <td>Limonada</td><td>$35</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center">—</td>
+          </tr>
+
+          <tr class="table-warning"><th colspan="4">🦁 Promociones</th></tr>
+          <tr class="producto" data-nombre="Combo Cachorro" data-precio="99">
+            <td>Combo Cachorro (pizza personal + refresco)</td><td>$99</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center">—</td>
+          </tr>
+          <tr class="producto" data-nombre="Promo Pareja" data-precio="179">
+            <td>Promo Pareja (1 pizza grande + 2 refrescos)</td><td>$179</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center">—</td>
+          </tr>
+          <tr class="producto" data-nombre="Promo Manada" data-precio="299">
+            <td>Promo Manada (2 pizzas grandes + refresco 2 L)</td><td>$299</td>
+            <td><input type="number" min="0" value="0" class="form-control cantidad"></td>
+            <td class="text-center">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <label class="form-label">Propina</label>
+    <select id="propina" class="form-select mb-4">
+      <option value="0">Sin propina</option>
+      <option value="10">10%</option>
+      <option value="15">15%</option>
+      <option value="20">20%</option>
+    </select>
+
+    <button class="btn btn-leon btn-lg w-100" onclick="calcular()">Calcular total</button>
+
+    <div id="resultado" class="mt-4 fs-5"></div>
+  </main>
+
+  <footer class="barra text-white text-center p-3">© 2026 Pizzería Mufasa</footer>
+
+  <script>
+    function calcular() {
+      let subtotal = 0;
+      let detalle = '';
+
+      document.querySelectorAll('.producto').forEach(function (fila) {
+        const cantidad = Number(fila.querySelector('.cantidad').value);
+        if (cantidad > 0) {
+          const precio = Number(fila.dataset.precio);
+          const queso = fila.querySelector('.queso');
+          const extra = (queso && queso.checked) ? 25 : 0;
+          const linea = (precio + extra) * cantidad;
+          subtotal += linea;
+          detalle += cantidad + ' x ' + fila.dataset.nombre +
+                     (extra ? ' (con queso extra)' : '') +
+                     ' - $' + linea.toFixed(2) + '<br>';
+        }
+      });
+
+      const resultado = document.getElementById('resultado');
+      if (subtotal === 0) {
+        resultado.innerHTML = 'Elige al menos un producto.';
+        return;
+      }
+
+      const porcentaje = Number(document.getElementById('propina').value);
+      const propina = subtotal * porcentaje / 100;
+      const total = subtotal + propina;
+
+      resultado.innerHTML =
+        detalle + '<hr>' +
+        'Subtotal: $' + subtotal.toFixed(2) + '<br>' +
+        'Propina: $' + propina.toFixed(2) + '<br>' +
+        '<strong>Total: $' + total.toFixed(2) + '</strong>';
+    }
+  </script>
+</body>
+</html>

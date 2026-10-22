@@ -1,0 +1,30 @@
+:root {
+  --melena: #E0A030;
+  --cafe: #3B2412;
+}
+
+body {
+  background: #FFF6E5;
+}
+
+.barra {
+  background: var(--cafe);
+}
+
+.titulo {
+  color: var(--cafe);
+}
+
+.btn-leon {
+  background: var(--melena);
+  color: var(--cafe);
+  font-weight: bold;
+}
+
+.btn-leon:hover {
+  background: #c98a1e;
+}
+.franja {
+  background: var(--cafe);
+  color: #fff;
+}
